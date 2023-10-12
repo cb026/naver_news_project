@@ -105,30 +105,33 @@ def collect_noun_words(filtered_text):
     final_noun_words = remove_single_char_word(nouns)
     return final_noun_words
 
+def main():
+    print(f'\n1. Load Data')
+    path = r'D:\naver_news_project\data'
+    filename = '문재인_news_20231010_clean.csv'
+    filepath = os.path.join(path, filename)
+    df = pd.read_csv(filepath)
+    # print(df.info())
 
-print(f'\n1. Load Data')
-path = r'D:\naver_news_project\data'
-filename = '문재인_news_20231010_clean.csv'
-filepath = os.path.join(path, filename)
-df = pd.read_csv(filepath)
-# print(df.info())
 
+    # 단어빈도 시각화
+    # index =0 
+    # filtered_text = df['contents_clean'][index]
 
-# 단어빈도 시각화
-# index =0 
-# filtered_text = df['contents_clean'][index]
+    filtered_text = df['contents_clean'].to_list()
+    filtered_text = [item for item in filtered_text if type(item)==str ]
+    filtered_text = ' '.join(filtered_text)
 
-filtered_text = df['contents_clean'].to_list()
-filtered_text = [item for item in filtered_text if type(item)==str ]
-filtered_text = ' '.join(filtered_text)
+    nouns = collect_noun_words(filtered_text)
+    top_nouns = get_most_common_words(nouns, num=50)
+    print(top_nouns)
 
-nouns = collect_noun_words(filtered_text)
-top_nouns = get_most_common_words(nouns, num=50)
-print(top_nouns)
-        
-fp = FrequencyPlot(top_nouns)
-fp.plot_barh(figsize=(10, 22), fontsize=12)
-# 트리맵(Treemap) 시각화¶
-fp.plot_treemap(figsize=(6, 6), fontsize=12, alpha=0.7) 
-# 워드클라우드(WordCloud) 시각화
-fp.plot_wordcloud(figsize=(6, 6), font_path=fontpath)
+    fp = FrequencyPlot(top_nouns)
+    fp.plot_barh(figsize=(10, 22), fontsize=12)
+    # 트리맵(Treemap) 시각화¶
+    fp.plot_treemap(figsize=(6, 6), fontsize=12, alpha=0.7) 
+    # 워드클라우드(WordCloud) 시각화
+    fp.plot_wordcloud(figsize=(6, 6), font_path=fontpath)
+    
+if __name__ == '__main__':
+    main()
